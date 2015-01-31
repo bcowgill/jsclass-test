@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<script src="https://rawgithub.com/javascript/augment/master/augment.js"></script>
+<script>
+window.onload = function () {
+    var extend = augment.extend;
+    var Shape = augment(Object, function () {
+        this.Circle = extend(this, {
+            constructor: function (x, y, r) {
+                this.x = x;
+                this.y = y;
+                this.r = r;
+            },
+            area: function () {
+                return Math.PI * this.r * this.r;
+            }
+        });
+        this.Rectangle = extend(this, {
+            constructor: function (x1, y1, x2, y2) {
+                this.x1 = x1;
+                this.y1 = y1;
+                this.x2 = x2;
+                this.y2 = y2;
+            },
+            area: function () {
+                return Math.abs((this.x2 - this.x1) * (this.y2 - this.y1));
+            }
+        });
+    });
+    var circle = new Shape.Circle(1,2,3);
+    var rect = new Shape.Rectangle(4,5,6,7);
+    console.log("Shape", Shape);
+    console.log("Rectangle", Shape.Rectangle);
+    console.log("Circle", Shape.Circle);
+    console.log("circle", circle, circle.area());
+    console.log("rect", rect, rect.area());
+}
+// -----------------------------------------------------------------------
+var Parent = augment.defclass({
+    constructor: function() {
+        this.const1 = 1;
+    },
+    proto1: 1
+});
+var Child1 = augment.extend(Parent, {
+    constructor: function() {
+        this.const2 = 2;
+    },
+    proto2: 2
+});
+var Child2 = augment.extend(Parent, {
+    constructor: function() {
+        this.uber.constructor.call(this);
+        this.const3 = 3;
+    },
+    proto3: 3
+});
+var child1 = new Child1();
+var child2 = new Child2();
+console.log('Test 1', ! child1.const1);
+console.log('Test 2', child2.const1);
+console.log('Test 3', child1.__proto__ === Child1.prototype);
+console.log(
+    'Test 4',
+    child1.__proto__.__proto__
+        === child2.__proto__.__proto__
+);
+console.log(
+    'Test 5',
+    child1.__proto__.__proto__
+        === Parent.prototype
+);</script>

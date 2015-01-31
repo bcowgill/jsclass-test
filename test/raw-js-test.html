@@ -1,0 +1,37 @@
+<script type="text/javascript">
+function Parent() {
+    this.const1 = 1;
+}
+Parent.prototype = {
+    proto1: 1
+}
+// -----------------------------------------------------------------------
+function Child1() {
+    this.const2 = 2;
+}
+Child1.prototype = Object.create(Parent.prototype);
+Child1.prototype.proto2 = 2;
+// -----------------------------------------------------------------------
+function Child2() {
+    Parent.call(this);
+    this.const3 = 3;
+}
+Child2.prototype = Object.create(Parent.prototype);
+Child2.prototype.proto3 = 3;
+// -----------------------------------------------------------------------
+var child1 = new Child1();
+var child2 = new Child2();
+console.log('Test 1', ! child1.const1);
+console.log('Test 2', child2.const1);
+console.log('Test 3', child1.__proto__ === Child1.prototype);
+console.log(
+    'Test 4',
+    child1.__proto__.__proto__
+        === child2.__proto__.__proto__
+);
+console.log(
+    'Test 5',
+    child1.__proto__.__proto__
+        === Parent.prototype
+);
+</script>
