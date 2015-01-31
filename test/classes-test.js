@@ -106,9 +106,10 @@ describe('augment', function() {
 		Classes.Augment.Base = augment(
 			Object,
 			function () {
-				var _private = 'private';
-				this.klassName = base;
-				this.method = function () {
+				var self = this,
+					_private = 'private';
+				self.klassName = base;
+				self.method = function () {
 					return this.klassName + '.method()';
 				};
 				void _private;
