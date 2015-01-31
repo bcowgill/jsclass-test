@@ -98,7 +98,7 @@ module.exports = function(grunt) {
 					'test/**/*.js',
 					'lib/**/*.js',
 					'Gruntfile.js'
-					'README.md'
+					//'README.md'
 				],
 				options: {
 					configure: 'jsdoc.conf.json'
