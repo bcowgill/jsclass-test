@@ -1,12 +1,12 @@
 /**
-	@file test/mocha-chai/XXX-test.js
+	@file test/class-test.js
 	@author Brent S.A. Cowgill
-	@requires XXX
+	@requires augment
 	@requires chai
 	@requires mocha
 
 	@description
-	Test plan for {@link module:XXX} module (chai)
+	Test plan for {@link module:augment} module (chai)
 
 	@see {@link http://chaijs.com/api/ Chai API Documentation}
 	@see {@link http://visionmedia.github.io/mocha/ Mocha Documentation}
@@ -80,10 +80,16 @@
 		actual.should.have.property(property).with.length(length);
 */
 
-var chai = chai || require('chai'),
+var isNode = typeof process === 'object' && process + '' === '[object process]',
+	dump = function (n, o) { console.log(n, isNode ? require('util').inspect(o) : o); },
+	augment = augment || require('augment'),
+	chai = chai || require('chai'),
 	assert = chai.assert,
 	expect = chai.expect,
 	should = chai.should(), // note function call here
+	Classes = {
+		Augment: {}
+	},
 	XXX = {
 		do: function (s) { return s.toUpperCase(); },
 		die: function(s) { throw(new Error(s)); }
@@ -94,56 +100,87 @@ chai.config.includeStack = true;   // turn on stack trace on assertion failure
 chai.config.showDiff = false;      // turn off reporter diff display
 chai.config.truncateThreshold = 0; // disable truncating actual/expected values
 
-describe('jshint', function() {
-	// it('should fail', function () { expect(expect).to.be.a('failure'); });
-	it('expect to be happy', function () { expect(expect).to.be.a('function'); });
-	it('should be happy', function () { should.exist(should); });
-	it('must do something useful', function () { expect(MUSTDO).to.be.a('function'); });
-});
+describe('augment', function() {
+	var obj, base = 'Classes.Augment.Base';
+	describe(base, function() {
+		Classes.Augment.Base = augment(
+			Object,
+			function () {
+				var _private = 'private';
+				this.klassName = base;
+				this.method = function () {
+					return this.klassName + '.method()';
+				};
+				void _private;
+			}
+		);
+		obj = Classes.Augment.Base;
 
-beforeEach(function() {
-	// setup code before every test
-});
-
-describe('#XXX', function () {
-
-	describe('.method()', function() {
-		it('.should do something useful', function() {
-			XXX.do('something useful').should.equal('SOMETHING USEFUL');
+		dump(base, obj);
+		it('should be object', function () {
+			expect(obj).to.be.a('object');
 		});
-		it('assert.throws an error', function() {
-			assert.throws(function () { XXX.die('horribly and slow'); });
+		it('should be instanceof Object', function () {
+			expect(obj).to.be.instanceof(Object);
 		});
-		it('assert.throws an error matching regex', function() {
-			assert.throws(
-				function () { XXX.die('horribly and slow'); },
-				/slow/);
+		it('should hide private vars', function () {
+			should.not.exist(obj._private);
 		});
-		it('should.throw an error matching regex', function() {
-			should.Throw(
-				function () { XXX.die('horribly and slow'); },
-				/slow/);
+		it('should have public klassName ' + base, function () {
+			expect(obj.klassName).to.be.equal(base);
 		});
-		it('expect.to.match found within an array', function() {
-			expect(
-				['string in array', 'does it match?'],
-				'does .match() look in array elements?').to.match(/match/);
-		});
-
-		it('no callback is a pending test.');
-		it.skip('SKIPPED TEST does something useful', function() {
-			XXX.do('with data').should.equal('something useful');
+		it('should have public method()', function () {
+			expect(obj.method()).to.be.equal(base + '.method()');
 		});
 	});
+});
 
-	describe.skip('SKIPPED SUITE .method()', function() {
-		it('does something useful', function() {
-			XXX.do('with data').should.equal('something useful');
-		});
+if (false) {
+	beforeEach(function() {
+		// setup code before every test
 	});
 
-	describe('IMPLEMENT THIS suite', MUSTDO);
-});
+	describe('#XXX', function () {
+
+		describe('.method()', function() {
+			it('.should do something useful', function() {
+				XXX.do('something useful').should.equal('SOMETHING USEFUL');
+			});
+			it('assert.throws an error', function() {
+				assert.throws(function () { XXX.die('horribly and slow'); });
+			});
+			it('assert.throws an error matching regex', function() {
+				assert.throws(
+					function () { XXX.die('horribly and slow'); },
+					/slow/);
+			});
+			it('should.throw an error matching regex', function() {
+				should.Throw(
+					function () { XXX.die('horribly and slow'); },
+					/slow/);
+			});
+			it('expect.to.match found within an array', function() {
+				expect(
+					['string in array', 'does it match?'],
+					'does .match() look in array elements?').to.match(/match/);
+			});
+
+			it('no callback is a pending test.');
+			it.skip('SKIPPED TEST does something useful', function() {
+				XXX.do('with data').should.equal('something useful');
+			});
+		});
+
+		describe.skip('SKIPPED SUITE .method()', function() {
+			it('does something useful', function() {
+				XXX.do('with data').should.equal('something useful');
+			});
+		});
+
+		describe('IMPLEMENT THIS suite', MUSTDO);
+	});
+}
+
 /*
 	======== A Handy Big Chai Test Reference ========
 	http://chaijs.com/guide/styles/
