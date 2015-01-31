@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!-- test/mocha-chai/chai-test.html
+	http://localhost:9999/test/mocha-chai/chai-test.html
+-->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Example Chai Test Suite</title>
+	<link rel="stylesheet" media="all" href="../node_modules/mocha/mocha.css">
+	<script src="../node_modules/mocha/mocha.js"></script>
+	<script>mocha.setup('bdd');</script>
+	<script src="../node_modules/chai/chai.js"></script>
+<!-- 	<script src="../lib/object-to-test.js"></script> -->
+	<script src="chai-test.js"></script>
+</head>
+<body>
+	<div id="mocha"><p><a href=".">Index</a></p></div>
+	<div id="messages"></div>
+	<div id="fixtures"></div>
+	<script>mocha.run();</script>
+</body>
+</html>
