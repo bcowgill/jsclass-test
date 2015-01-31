@@ -1,15 +1,11 @@
 {
+  "name": "jsclass-test",
   "private": true,
   "license": "Unlicense",
   "version": "0.0.1",
-  "name": "jsclass-test",
   "title": "jsclass-test",
   "main": "jsclass-test.js",
   "description": "A test of some javascript class libraries",
-  "keywords": [
-    "class",
-    "test"
-  ],
   "author": {
     "name": "Brent S.A. Cowgill",
     "email": "brent@blismedia.com"
@@ -28,19 +24,41 @@
   },
   "scripts": {
     "docs": "jsdoc --destination doc --recurse test/ lib/",
-    "test": "mocha --reporter spec test/mocha-chai/",
+    "test": "mocha --reporter spec test/",
     "benchmark": "node test/benchmark-test.js",
     "devwebserver": "webserver.sh"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bcowgill/jsclass-test.git"
+  },
+  "keywords": [
+    "class",
+    "test"
+  ],
+  "licenses": [
+    {
+      "type": "The Unlicense",
+      "url": "http://unlicense.org/"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/bcowgill/jsclass-test/issues"
+  },
+  "homepage": "https://github.com/bcowgill/jsclass-test",
   "devDependencies": {
-    "grunt": "~0.4.2",
-    "grunt-contrib-jshint": "~0.7.2",
-    "grunt-contrib-watch": "~0.5.3",
-    "grunt-jsdoc": "~0.5.6",
-    "extend": "~1.2.1",
-    "benchmark": "~1.0.0",
+    "mocha": "^1.20.1",
     "chai": "^1.9.1",
-    "glob": "^4.0.6"
+    "jsdoc": "^3.3.0-alpha8",
+    "glob": "^4.0.6",
+    "grunt": "~0.4.2",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-jsdoc": "~0.5.6",
+    "grunt-mocha-chai-sinon": "0.0.8",
+    "grunt-contrib-watch": "~0.5.3",
+    "extend": "~1.2.1",
+    "benchmark": "~1.0.0"
   },
   "optionalDevDependencies": {
     "sublime-grunt-build": "~1.1.1"
