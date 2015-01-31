@@ -126,7 +126,7 @@ body {
 
 #mocha .test.fail pre {
   /* color: black; BSAC */
-  color: white; /* BSAC */
+  color: red; /* BSAC */
 }
 
 #mocha .test.fail::before {
