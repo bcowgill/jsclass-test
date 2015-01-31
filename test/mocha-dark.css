@@ -109,12 +109,14 @@ body {
 }
 
 #mocha .test.pending {
-  color: #0b97c4;
+  /* color: #0b97c4; BSAC */
+  color: cyan; /* BSAC */
 }
 
 #mocha .test.pending::before {
   content: '◦';
-  color: #0b97c4;
+  /* color: #0b97c4; BSAC */
+  color: cyan; /* BSAC */
 }
 
 #mocha .test.fail {
