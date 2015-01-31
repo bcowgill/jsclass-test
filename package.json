@@ -1,0 +1,48 @@
+{
+  "private": true,
+  "license": "Unlicense",
+  "version": "0.0.1",
+  "name": "jsclass-test",
+  "title": "jsclass-test",
+  "main": "jsclass-test.js",
+  "description": "A test of some javascript class libraries",
+  "keywords": [
+    "class",
+    "test"
+  ],
+  "author": {
+    "name": "Brent S.A. Cowgill",
+    "email": "brent@blismedia.com"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "directories": {
+    "doc": "./doc",
+    "man": "./man",
+    "lib": "./lib",
+    "bin": "./bin"
+  },
+  "config": {
+    "port": "8919"
+  },
+  "scripts": {
+    "docs": "jsdoc --destination doc --recurse test/ lib/",
+    "test": "mocha --reporter spec test/mocha-chai/",
+    "benchmark": "node test/benchmark-test.js",
+    "devwebserver": "webserver.sh"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-jsdoc": "~0.5.6",
+    "extend": "~1.2.1",
+    "benchmark": "~1.0.0",
+    "chai": "^1.9.1",
+    "glob": "^4.0.6"
+  },
+  "optionalDevDependencies": {
+    "sublime-grunt-build": "~1.1.1"
+  }
+}
