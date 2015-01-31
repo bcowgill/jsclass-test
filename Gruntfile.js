@@ -10,6 +10,7 @@
 	@see {@link http://usejsdoc.org/ JSDoc Documentation}
 
 	@todo need to get mocha tests running from grunt itself, just cygwin.sh for now
+	@todo grunt-mocha to run client side mocha tests with phantomjs
 */
 
 /**
