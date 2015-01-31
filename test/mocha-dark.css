@@ -118,7 +118,8 @@ body {
 }
 
 #mocha .test.fail {
-  color: #c00;
+  /* color: #c00; BSAC */
+  color: red; /* BSAC */
 }
 
 #mocha .test.fail pre {
@@ -132,11 +133,13 @@ body {
   display: block;
   float: left;
   margin-right: 5px;
-  color: #c00;
+  /* color: #c00; BSAC */
+  color: red; /* BSAC */
 }
 
 #mocha .test pre.error {
-  color: #c00;
+  /* color: #c00; BSAC */
+  color: red; /* BSAC */
   max-height: 300px;
   overflow: auto;
 }
@@ -212,7 +215,8 @@ body {
 }
 
 #mocha-error {
-  color: #c00;
+  /* color: #c00; BSAC */
+  color: red; /* BSAC */
   font-size: 1.5em;
   font-weight: 100;
   letter-spacing: 1px;
