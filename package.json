@@ -62,5 +62,12 @@
   },
   "optionalDevDependencies": {
     "sublime-grunt-build": "~1.1.1"
+  },
+  "dependencies": {
+    "augment": "^4.3.0",
+    "klass": "^1.4.0",
+    "jsclass": "^4.0.5",
+    "joose": "^3.50.0",
+    "pjs": "^5.1.1"
   }
 }
