@@ -87,7 +87,8 @@ var isNode = typeof process === 'object' && process + '' === '[object process]',
 	expect = chai.expect,
 	should = chai.should(), // note function call here
 	Classes = !isNode ? window.Classes : {
-		'Augment': require('../lib/augment-objs')
+		'Augment': require('../lib/augment-objs'),
+		'Klass':   require('../lib/klass-objs')
 	},
 	XXX = {
 		do: function (s) { return s.toUpperCase(); },
@@ -101,40 +102,50 @@ chai.config.truncateThreshold = 0; // disable truncating actual/expected values
 
 dump('Classes', Classes);
 
-describe('augment', function() {
-	var obj, base = 'Classes.Augment.Base';
-	describe(base, function() {
-		obj = Classes.Augment.Base;
+function testBase(libName, nameSpaceName, nameSpace)
+{
+	var base = nameSpaceName + '.Base',
+		obj = nameSpace.Base;
 
-		it('should be object', function () {
-			expect(obj).to.be.a('object');
-		});
-		it('should be instanceof Object', function () {
-			expect(obj).to.be.instanceof(Object);
-		});
-		it('should hide private vars', function () {
-			should.not.exist(obj._private);
-		});
-		it('should have public klassName ' + base, function () {
-			expect(obj.klassName).to.be.equal(base);
-		});
-		it('should have public baseClassMethod()', function () {
-			expect(obj.baseClassMethod()).to.be.equal(base + '.baseClassMethod()');
-		});
-		it('should have public method()', function () {
-			expect(obj.method()).to.be.equal(base + '.method()');
+	describe(libName, function()
+	{
+		describe(base, function()
+		{
+			it('should be object', function () {
+				expect(obj).to.be.a('object');
+			});
+			it('should be instanceof Object', function () {
+				expect(obj).to.be.instanceof(Object);
+			});
+			it('should hide private vars', function () {
+				should.not.exist(obj._private);
+			});
+			it('should have public klassName ' + base, function () {
+				expect(obj.klassName).to.be.equal(base);
+			});
+			it('should have public baseClassMethod()', function () {
+				expect(obj.baseClassMethod()).to.be.equal(base + '.baseClassMethod()');
+			});
+			it('should have public method()', function () {
+				expect(obj.method()).to.be.equal(base + '.method()');
+			});
 		});
 	});
-});
+}
+
+testBase('augment', 'Classes.Augment', Classes.Augment);
+testBase('klass',   'Classes.Klass',   Classes.Klass);
 
 if (false) {
-	beforeEach(function() {
+	beforeEach(function()
+	{
 		// setup code before every test
 	});
 
-	describe('#XXX', function () {
-
-		describe('.method()', function() {
+	describe('#XXX', function ()
+	{
+		describe('.method()', function()
+		{
 			it('.should do something useful', function() {
 				XXX.do('something useful').should.equal('SOMETHING USEFUL');
 			});
@@ -163,7 +174,8 @@ if (false) {
 			});
 		});
 
-		describe.skip('SKIPPED SUITE .method()', function() {
+		describe.skip('SKIPPED SUITE .method()', function()
+		{
 			it('does something useful', function() {
 				XXX.do('with data').should.equal('something useful');
 			});
