@@ -12,7 +12,7 @@
 	@see {@link http://visionmedia.github.io/mocha/ Mocha Documentation}
 */
 /*jshint node: true, indent: 4, smarttabs: true, maxlen: 128 */
-/*global beforeEach, describe, it */
+/*global window, beforeEach, describe, it */
 'use strict';
 
 /*
@@ -86,8 +86,8 @@ var isNode = typeof process === 'object' && process + '' === '[object process]',
 	assert = chai.assert,
 	expect = chai.expect,
 	should = chai.should(), // note function call here
-	Classes = {
-		Augment: require('../lib/augment-objs')
+	Classes = !isNode ? window.Classes : {
+		'Augment': require('../lib/augment-objs')
 	},
 	XXX = {
 		do: function (s) { return s.toUpperCase(); },
@@ -99,12 +99,13 @@ chai.config.includeStack = true;   // turn on stack trace on assertion failure
 chai.config.showDiff = false;      // turn off reporter diff display
 chai.config.truncateThreshold = 0; // disable truncating actual/expected values
 
+dump('Classes', Classes);
+
 describe('augment', function() {
 	var obj, base = 'Classes.Augment.Base';
 	describe(base, function() {
 		obj = Classes.Augment.Base;
 
-		dump(base, obj);
 		it('should be object', function () {
 			expect(obj).to.be.a('object');
 		});
