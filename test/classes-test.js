@@ -134,8 +134,46 @@ function testBase(libName, nameSpaceName, nameSpace, typeName)
 	});
 }
 
+function testBaseInstance(libName, nameSpaceName, nameSpace, typeName)
+{
+	var base = nameSpaceName + '.Base',
+		Obj = nameSpace.Base,
+		inst = new Obj();
+	typeName = typeName || 'object';
+
+	dump('instance of ' + base, inst);
+	describe(libName, function()
+	{
+		describe('instance of ' + base, function()
+		{
+			it('should be ' + typeName, function () {
+				expect(inst).to.be.a(typeName);
+			});
+			it('should be instanceof Object', function () {
+				expect(inst).to.be.instanceof(Object);
+			});
+			it('should hide private vars', function () {
+				should.not.exist(inst._private);
+			});
+			it('should have public klassName ' + base, function () {
+				expect(inst.klassName).to.be.equal(base);
+			});
+			it('should have public baseClassMethod()', function () {
+				expect(inst.baseClassMethod()).to.be.equal(base + '.baseClassMethod()');
+			});
+			it('should have public method()', function () {
+				expect(inst.method()).to.be.equal(base + '.method()');
+			});
+		});
+	});
+}
+
 testBase('augment', 'Classes.Augment', Classes.Augment);
 testBase('klass',   'Classes.Klass',   Classes.Klass, 'function');
+
+//testBaseInstance('augment', 'Classes.Augment', Classes.Augment);
+testBaseInstance('klass',   'Classes.Klass',   Classes.Klass);
+
 
 if (false) {
 	beforeEach(function()
