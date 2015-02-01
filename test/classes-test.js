@@ -102,17 +102,18 @@ chai.config.truncateThreshold = 0; // disable truncating actual/expected values
 
 dump('Classes', Classes);
 
-function testBase(libName, nameSpaceName, nameSpace)
+function testBase(libName, nameSpaceName, nameSpace, typeName)
 {
 	var base = nameSpaceName + '.Base',
 		obj = nameSpace.Base;
+	typeName = typeName || 'object';
 
 	describe(libName, function()
 	{
 		describe(base, function()
 		{
-			it('should be object', function () {
-				expect(obj).to.be.a('object');
+			it('should be ' + typeName, function () {
+				expect(obj).to.be.a(typeName);
 			});
 			it('should be instanceof Object', function () {
 				expect(obj).to.be.instanceof(Object);
@@ -134,7 +135,7 @@ function testBase(libName, nameSpaceName, nameSpace)
 }
 
 testBase('augment', 'Classes.Augment', Classes.Augment);
-testBase('klass',   'Classes.Klass',   Classes.Klass);
+testBase('klass',   'Classes.Klass',   Classes.Klass, 'function');
 
 if (false) {
 	beforeEach(function()
