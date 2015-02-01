@@ -82,13 +82,12 @@
 
 var isNode = typeof process === 'object' && process + '' === '[object process]',
 	dump = function (n, o) { console.log(n, isNode ? require('util').inspect(o) : o); },
-	augment = augment || require('augment'),
 	chai = chai || require('chai'),
 	assert = chai.assert,
 	expect = chai.expect,
 	should = chai.should(), // note function call here
 	Classes = {
-		Augment: {}
+		Augment: require('../lib/augment-objs')
 	},
 	XXX = {
 		do: function (s) { return s.toUpperCase(); },
@@ -103,18 +102,6 @@ chai.config.truncateThreshold = 0; // disable truncating actual/expected values
 describe('augment', function() {
 	var obj, base = 'Classes.Augment.Base';
 	describe(base, function() {
-		Classes.Augment.Base = augment(
-			Object,
-			function () {
-				var self = this,
-					_private = 'private';
-				self.klassName = base;
-				self.method = function () {
-					return this.klassName + '.method()';
-				};
-				void _private;
-			}
-		);
 		obj = Classes.Augment.Base;
 
 		dump(base, obj);
@@ -129,6 +116,9 @@ describe('augment', function() {
 		});
 		it('should have public klassName ' + base, function () {
 			expect(obj.klassName).to.be.equal(base);
+		});
+		it('should have public baseClassMethod()', function () {
+			expect(obj.baseClassMethod()).to.be.equal(base + '.baseClassMethod()');
 		});
 		it('should have public method()', function () {
 			expect(obj.method()).to.be.equal(base + '.method()');
