@@ -102,6 +102,45 @@ chai.config.truncateThreshold = 0; // disable truncating actual/expected values
 
 dump('Classes', Classes);
 
+function testThingInstance(libName, nameSpaceName, nameSpace)
+{
+	var Class = nameSpace.Thing,
+		className = nameSpaceName + '.Thing',
+		obj = nameSpace.thing;
+
+	describe(libName, function()
+	{
+		describe('instance of ' + className, function()
+		{
+			it('should be object', function () {
+				expect(obj).to.be.an('object');
+			});
+			it('should be instanceof Object', function () {
+				expect(obj).to.be.instanceof(Object);
+			});
+			it('Object.getPrototypeOf(thing) should be ' + className + '.prototype', function () {
+				expect(Object.getPrototypeOf(obj)).to.be.equal(Class.prototype);
+			});
+			it(className + '.prototype.isPrototypeOf(thing) should be true', function () {
+				expect(Class.prototype.isPrototypeOf(obj)).to.be.true();
+			});
+
+			it('thing.CONST should be CONST', function () {
+				expect(obj.CONST).to.equal('CONST');
+			});
+			it('thing.gname should be thingName', function () {
+				expect(obj.gname).to.equal('thingName');
+			});
+			it('thing.instMethod should be function', function () {
+				expect(obj.instMethod).to.be.a('function');
+			});
+			it('thing.instMethod(what) should be CONST thingName what', function () {
+				expect(obj.instMethod('what')).to.be.equal('CONST thingName what');
+			});
+		});
+	});
+}
+
 function testBase(libName, nameSpaceName, nameSpace, typeName)
 {
 	var base = nameSpaceName + '.Base',
@@ -141,7 +180,6 @@ function testBaseInstance(libName, nameSpaceName, nameSpace, typeName)
 		inst = new Obj();
 	typeName = typeName || 'object';
 
-	dump('instance of ' + base, inst);
 	describe(libName, function()
 	{
 		describe('instance of ' + base, function()
@@ -168,11 +206,16 @@ function testBaseInstance(libName, nameSpaceName, nameSpace, typeName)
 	});
 }
 
+
 testBase('augment', 'Classes.Augment', Classes.Augment);
 testBase('klass',   'Classes.Klass',   Classes.Klass, 'function');
 
+testThingInstance('augment', 'Classes.Augment', Classes.Augment);
+testThingInstance('klass', 'Classes.Klass', Classes.Klass);
+
+
 //testBaseInstance('augment', 'Classes.Augment', Classes.Augment);
-testBaseInstance('klass',   'Classes.Klass',   Classes.Klass);
+//testBaseInstance('klass',   'Classes.Klass',   Classes.Klass);
 
 
 if (false) {
