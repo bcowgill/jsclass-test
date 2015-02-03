@@ -128,7 +128,23 @@ function testThingInstance(libName, nameSpaceName, nameSpace)
 			it('thing.CONST should be CONST', function () {
 				expect(obj.CONST).to.equal('CONST');
 			});
+			it('thing.CONST should be unchangeable', function () {
+				should.Throw(
+					function () {
+						obj.CONST = 'NOTCONST';
+					},
+					TypeError,
+					/Cannot assign to read only property 'CONST'/
+				);
+				expect(obj.CONST).to.equal('CONST');
+			});
 			it('thing.gname should be thingName', function () {
+				expect(obj.gname).to.equal('thingName');
+			});
+			it('thing.gname should be changeable', function () {
+				obj.gname = 'changedName';
+				expect(obj.gname).to.equal('changedName');
+				obj.gname = 'thingName';
 				expect(obj.gname).to.equal('thingName');
 			});
 			it('thing.instMethod should be function', function () {
