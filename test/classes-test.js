@@ -101,6 +101,8 @@ chai.config.showDiff = false;      // turn off reporter diff display
 chai.config.truncateThreshold = 0; // disable truncating actual/expected values
 
 dump('Classes', Classes);
+dump('prototypes', Classes.Klass.getPrototypesOf(Classes.Klass.thing));
+dump('ancestors', Classes.Klass.getAncestorsOf(Classes.Klass.thing));
 
 function testThingInstance(libName, nameSpaceName, nameSpace)
 {
