@@ -104,6 +104,38 @@ dump('Classes', Classes);
 dump('prototypes', Classes.Klass.getPrototypesOf(Classes.Klass.thing));
 dump('ancestors', Classes.Klass.getAncestorsOf(Classes.Klass.thing));
 
+function testThingClass(libName, nameSpaceName, nameSpace)
+{
+	var base = nameSpaceName + '.Thing',
+		obj = nameSpace.Thing,
+		typeName = 'function';
+
+	describe(libName, function()
+	{
+		describe(base, function()
+		{
+			it('should be ' + typeName, function () {
+				expect(obj).to.be.a(typeName);
+			});
+			it('should be instanceof Object', function () {
+				expect(obj).to.be.instanceof(Object);
+			});
+			it('should hide private vars', function () {
+				should.not.exist(obj._private);
+			});
+			it('should have public klassName ' + base, function () {
+				expect(obj.klassName).to.be.equal(base);
+			});
+			it('should have public baseClassMethod()', function () {
+				expect(obj.baseClassMethod()).to.be.equal(base + '.baseClassMethod()');
+			});
+			it('should have public method()', function () {
+				expect(obj.method()).to.be.equal(base + '.method()');
+			});
+		});
+	});
+}
+
 function testThingInstance(libName, nameSpaceName, nameSpace)
 {
 	var Class = nameSpace.Thing,
@@ -181,6 +213,19 @@ function testBase(libName, nameSpaceName, nameSpace, typeName)
 			it('should have public klassName ' + base, function () {
 				expect(obj.klassName).to.be.equal(base);
 			});
+			it('should have public CONST ' + base, function () {
+				expect(obj.CONST).to.be.equal('CONST');
+			});
+			it('static CONST should be unchangeable', function () {
+				should.Throw(
+					function () {
+						obj.CONST = 'NOTCONST';
+					},
+					TypeError,
+					/Cannot assign to read only property 'CONST'/
+				);
+				expect(obj.CONST).to.equal('CONST');
+			});
 			it('should have public baseClassMethod()', function () {
 				expect(obj.baseClassMethod()).to.be.equal(base + '.baseClassMethod()');
 			});
@@ -228,6 +273,8 @@ function testBaseInstance(libName, nameSpaceName, nameSpace, typeName)
 testBase('augment', 'Classes.Augment', Classes.Augment);
 testBase('klass',   'Classes.Klass',   Classes.Klass, 'function');
 
+testThingClass('augment', 'Classes.Augment', Classes.Augment);
+testThingClass('klass', 'Classes.Klass', Classes.Klass);
 testThingInstance('augment', 'Classes.Augment', Classes.Augment);
 testThingInstance('klass', 'Classes.Klass', Classes.Klass);
 
