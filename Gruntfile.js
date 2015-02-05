@@ -134,6 +134,7 @@ module.exports = function(grunt) {
 		'grunt-contrib-jshint',
 		'grunt-jsdoc',
 		'grunt-mocha-chai-sinon',
+		'grunt-mocha-tests',
 		'grunt-contrib-watch'
 	].forEach(function (task) {
 		grunt.loadNpmTasks(task);

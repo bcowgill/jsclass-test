@@ -1,7 +1,6 @@
 .gitignore
 lib/perl.js
 test
-perl
 doc
 scripts
 Makefile
