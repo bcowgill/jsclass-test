@@ -278,7 +278,7 @@ testThingClass('klass', 'Classes.Klass', Classes.Klass);
 testThingInstance('augment', 'Classes.Augment', Classes.Augment);
 testThingInstance('klass', 'Classes.Klass', Classes.Klass);
 
-
+void testBaseInstance;
 //testBaseInstance('augment', 'Classes.Augment', Classes.Augment);
 //testBaseInstance('klass',   'Classes.Klass',   Classes.Klass);
 
