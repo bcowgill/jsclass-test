@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"getPr",
+				"getPrototypesOf"
+			],
+			[
+				"getPrototy",
+				"getPrototypesOf"
+			],
+			[
 				"REM",
 				"REMAP"
 			],
@@ -16,10 +24,18 @@
 	"buffers":
 	[
 		{
+			"file": "test/classes-test.js",
+			"settings":
+			{
+				"buffer_size": 16686,
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "package.json",
 			"settings":
 			{
-				"buffer_size": 1697,
+				"buffer_size": 1668,
 				"line_ending": "Unix"
 			}
 		},
@@ -48,10 +64,7 @@
 			}
 		},
 		{
-			"contents": "/*jshint node: true, indent: 4, smarttabs: true, maxlen: 140, maxstatements: 100 */\n/*global module:false*/\n/**\n	@file Gruntfile.js\n	@author Brent S.A. Cowgill\n	@see {@link module:Gruntfile}\n	@description\n	Grunt build configuration.\n\n	@see {@link http://usejsdoc.org/ JSDoc Documentation}\n\n	@todo need to get mocha tests running from grunt itself, just cygwin.sh for now\n	@todo grunt-mocha to run client side mocha tests with phantomjs\n*/\n\n/**\n	Grunt build configuration.\n	@module Gruntfile\n*/\n\n\nmodule.exports = function(grunt) {\n	'use strict';\n\n	// Project configuration.\n	grunt.initConfig({\n		// Metadata.\n		pkg: grunt.file.readJSON('package.json'),\n		// Task configuration.\n		/**\n			clean up files on disk before build.\n			@see {@link https://github.com/gruntjs/grunt-contrib-clean About clean grunt plugin}\n		*/\n		clean: {\n			jsdoc: {\n				src: ['doc/']\n			}\n		},\n		/**\n			jshint validation of javascript code.\n			@see {@link https://github.com/gruntjs/grunt-contrib-jshint About jshint grunt plugin}\n			@see {@link http://jshint.com/docs/options/ jshint options}\n			@see {@link https://github.com/jshint/jshint/blob/master/src/messages.js Warning codes for jshint}\n		*/\n		jshint: {\n			options: {\n				jshintrc: '.jshintrc-node',\n				globals: {},\n			},\n			gruntfile: {\n				options: {\n					jshintrc: '.jshintrc-gruntfile',\n					globals: {},\n				},\n				src: ['package.json', 'Gruntfile.js']\n			},\n			single: {\n				src: ['package.json'] // set to just check a single file\n			},\n			lib: {\n				src: ['lib/**/*.js']\n			},\n			test: {\n				src: ['test/**/*.js']\n			}\n		},\n		/**\n			Running tests in the console using mocha/chai.\n			@see {@link https://github.com/thepeg/grunt-mocha-chai-sinon Grunt plugin for mocha, chai, and sinon}\n			@see {@link http://visionmedia.github.io/mocha/ mocha documentation}\n			@see {@link http://chaijs.com/api/ chai documentation}\n		*/\n		'mocha-chai-sinon': {\n			test: {\n				src: ['./test/**/*-test.js'],\n				options: {\n					ui: 'bdd',\n					// spec, list, tap, nyan, progress, dot, min, landing, doc, markdown, html-cov, json-cov, json, json-stream, xunit\n					reporter: 'tap',\n					bail: false, // true to bail after first test failure\n					//grep: '.*', // invert: true, // filter to run subset of tests\n					sort: true, // sort order of test files\n					trace: true, // trace function calls\n					'check-leaks': true, // check for global variable leaks\n					'expose-gc': true,\n					//timeout: 10, slow: 10, // async ms timeout and slow test threshold\n					'inline-diffs': false// show actual/expected diffs inline\n				}\n			}\n		},\n		/**\n			Generate application documentation with jsdoc\n			@see {@link https://github.com/krampstudio/grunt-jsdoc Grunt jsdoc plugin}\n			@see {@link http://usejsdoc.org/ jsdoc documentation tags}\n			@see {@link http://usejsdoc.org/about-commandline.html jsdoc command line options}\n		*/\n		jsdoc: {\n			docs : {\n				dest: 'doc',\n				src: [\n					'test/**/*.js',\n					'lib/**/*.js',\n					'Gruntfile.js'\n					//'README.md'\n				],\n				options: {\n					configure: 'jsdoc.conf.json'\n				}\n			}\n		},\n		/**\n			Watch files and run build targets on change\n			@see {@link https://github.com/gruntjs/grunt-contrib-watch Grunt watch plugin}\n		*/\n		watch: {\n			gruntfile: {\n				files: '<%= jshint.gruntfile.src %>',\n				tasks: ['jshint:gruntfile']\n			},\n			lib: {\n				files: '<%= jshint.lib.src %>',\n				tasks: ['jshint:lib', 'nodeunit']\n			},\n			test: {\n				files: '<%= jshint.test.src %>',\n				tasks: ['jshint:test', 'nodeunit']\n			}\n		}\n	});\n\n	// These plugins provide necessary tasks.\n	[\n		'grunt-contrib-clean',\n		'grunt-contrib-jshint',\n		'grunt-jsdoc',\n		'grunt-mocha-chai-sinon',\n		'grunt-mocha-tests',\n		'grunt-contrib-watch'\n	].forEach(function (task) {\n		grunt.loadNpmTasks(task);\n	});\n\n\n	// Default task.\n	grunt.registerTask('default', ['all']);\n	grunt.registerTask('all', ['windows', 'docs', 'test']);\n	grunt.registerTask('docs', ['clean:jsdoc', 'jsdoc']);\n	grunt.registerTask('test', [\n		'mocha-chai-sinon'\n	]);\n	grunt.registerTask('windows', [\n		'jshint:gruntfile',\n		'jshint:lib',\n		'jshint:test'\n	]);\n	grunt.registerTask('single', ['jshint:single']);\n};\n",
 			"file": "Gruntfile.js",
-			"file_size": 4087,
-			"file_write_time": 130672052241634084,
 			"settings":
 			{
 				"buffer_size": 4110,
@@ -62,7 +75,7 @@
 			"file": "/D/d/s/github/get-pj.sh",
 			"settings":
 			{
-				"buffer_size": 554,
+				"buffer_size": 577,
 				"line_ending": "Unix"
 			}
 		},
@@ -91,10 +104,7 @@
 			}
 		},
 		{
-			"contents": ".gitignore\nlib/perl.js\ntest\ndoc\nscripts\nMakefile\nGruntfile.js\n.jshint*\njsdoc.conf.json\n*.txt\n*.bak\n*.sublime-*\n*.timestamp",
 			"file": ".npmignore",
-			"file_size": 127,
-			"file_write_time": 130671957455442624,
 			"settings":
 			{
 				"buffer_size": 122,
@@ -134,10 +144,18 @@
 			}
 		},
 		{
-			"file": "test/classes-test.js",
+			"file": "klass/src/klass.js",
 			"settings":
 			{
-				"buffer_size": 13359,
+				"buffer_size": 2107,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/klass-objs.js",
+			"settings":
+			{
+				"buffer_size": 4226,
 				"line_ending": "Windows"
 			}
 		},
@@ -145,16 +163,32 @@
 			"file": "lib/augment-objs.js",
 			"settings":
 			{
-				"buffer_size": 1391,
+				"buffer_size": 2098,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "lib/klass-objs.js",
+			"file": "klass/test/tests.js",
 			"settings":
 			{
-				"buffer_size": 1237,
-				"line_ending": "Windows"
+				"buffer_size": 11711,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/augment-bsac.js",
+			"settings":
+			{
+				"buffer_size": 1440,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/klass-bsac.js",
+			"settings":
+			{
+				"buffer_size": 2424,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -266,6 +300,24 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"    ",
+			"noop",
+			"  ",
+			"context",
+			"statics",
+			"boooosh",
+			"instanceof",
+			"supr",
+			"boooo",
+			"osh",
+			"oshr",
+			"console.log",
+			"undefined",
+			"fnTest",
+			"fntest",
+			"Throw",
+			"throw",
+			"truthy",
 			"obj",
 			"Augment",
 			"augment",
@@ -375,25 +427,7 @@
 			"regex_transparent",
 			"transparent",
 			"128",
-			"127",
-			"rgb",
-			"%",
-			"COLOR_ONLY",
-			"real",
-			"background-color",
-			"background",
-			"#a6b779",
-			"#5e7d00",
-			"{",
-			"color",
-			"html-reporter",
-			"module",
-			"regex",
-			"RegExp",
-			"regexp",
-			">\n",
-			"Benchmark",
-			"module"
+			"127"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -401,6 +435,9 @@
 		"regex": true,
 		"replace_history":
 		[
+			"\\t",
+			"NoOp",
+			"\\t",
 			"inst",
 			"Klass",
 			"klass",
@@ -433,23 +470,50 @@
 	"groups":
 	[
 		{
-			"selected": 15,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "package.json",
+					"file": "test/classes-test.js",
 					"settings":
 					{
-						"buffer_size": 1697,
+						"buffer_size": 16686,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1070,
-								1070
+								9629,
+								9629
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 8262.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "package.json",
+					"settings":
+					{
+						"buffer_size": 1668,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -459,13 +523,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1879.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 1,
+					"buffer": 2,
 					"file": ".gitignore",
 					"settings":
 					{
@@ -485,13 +549,13 @@
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 279.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 3,
 					"file": "README.md",
 					"settings":
 					{
@@ -517,7 +581,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 4,
 					"file": "LICENSE",
 					"settings":
 					{
@@ -543,7 +607,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 5,
 					"file": "Gruntfile.js",
 					"settings":
 					{
@@ -564,25 +628,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 24.0,
-						"translation.y": 5095.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 6,
 					"file": "/D/d/s/github/get-pj.sh",
 					"settings":
 					{
-						"buffer_size": 554,
+						"buffer_size": 577,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								143,
-								143
+								0,
+								0
 							]
 						],
 						"settings":
@@ -596,7 +660,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": ".jshintignore",
 					"settings":
 					{
@@ -622,7 +686,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 8,
 					"file": ".jshintrc-gruntfile",
 					"settings":
 					{
@@ -649,7 +713,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 9,
 					"file": ".jshintrc-node",
 					"settings":
 					{
@@ -670,13 +734,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 80.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 10,
 					"file": ".npmignore",
 					"settings":
 					{
@@ -702,7 +766,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 11,
 					"file": "jsdoc.conf.json",
 					"settings":
 					{
@@ -728,7 +792,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 12,
 					"file": "scripts/cygwin.sh",
 					"settings":
 					{
@@ -754,7 +818,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 13,
 					"file": "test/mocha-dark.css",
 					"settings":
 					{
@@ -776,13 +840,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2479.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 14,
 					"file": "test/classes-test.html",
 					"settings":
 					{
@@ -803,79 +867,59 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 119.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 14,
-					"file": "test/classes-test.js",
-					"settings":
-					{
-						"buffer_size": 13359,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5315,
-								5315
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 2597.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 15,
-					"file": "lib/augment-objs.js",
+					"file": "klass/src/klass.js",
 					"settings":
 					{
-						"buffer_size": 1391,
+						"buffer_size": 2107,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								988,
-								988
+								534,
+								534
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1514.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
-				},
+				}
+			]
+		},
+		{
+			"selected": 2,
+			"sheets":
+			[
 				{
 					"buffer": 16,
 					"file": "lib/klass-objs.js",
 					"settings":
 					{
-						"buffer_size": 1237,
+						"buffer_size": 4226,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								837,
-								837
+								512,
+								512
 							]
 						],
 						"settings":
@@ -884,7 +928,118 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 474.0,
+						"translation.y": 180.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "lib/augment-objs.js",
+					"settings":
+					{
+						"buffer_size": 2098,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "klass/test/tests.js",
+					"settings":
+					{
+						"buffer_size": 11711,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								329,
+								329
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "lib/augment-bsac.js",
+					"settings":
+					{
+						"buffer_size": 1440,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								223,
+								223
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "lib/klass-bsac.js",
+					"settings":
+					{
+						"buffer_size": 2424,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								160,
+								160
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -909,11 +1064,18 @@
 				0,
 				1,
 				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
 			]
 		],
 		"cols":
 		[
 			0.0,
+			0.491584305328,
 			1.0
 		],
 		"rows":
@@ -960,6 +1122,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 260.0,
+	"side_bar_width": 241.0,
 	"status_bar_visible": true
 }

@@ -6,79 +6,14 @@
 	@requires mocha
 
 	@description
-	Test plan for {@link module:augment} module (chai)
+	Test plan for JavaScript objeect libararies {@link module:augment} module (chai)
 
 	@see {@link http://chaijs.com/api/ Chai API Documentation}
 	@see {@link http://visionmedia.github.io/mocha/ Mocha Documentation}
 */
-/*jshint node: true, indent: 4, smarttabs: true, maxlen: 128 */
+/*jshint node: true, indent: 4, smarttabs: true, maxlen: 128, maxstatements: false */
 /*global window, beforeEach, describe, it */
 'use strict';
-
-/*
-	======== A Handy Little Mocha/Chai Test Reference ========
-	http://chaijs.com/guide/styles/
-	http://chaijs.com/api/bdd/
-	http://visionmedia.github.io/mocha/
-
-	Test suites (mocha):
-		describe(suite, [fn]);  // omitting function marks it as a pending suite/spec
-		it(tests, [fn]);
-		describe/it.only(description, fn) // run only one test/case
-		describe/it.skip(suite, fn); // test marked pending and skips execution
-		before(fn);
-		after(fn);
-		beforeEach(fn);
-		afterEach(fn);
-
-	Test assertions:
-		assert.ok(actual, [message]); // truthy
-		assert.notOk(actual, [message]); // falsy
-		assert.equal(actual, expected, [message]);              // ==
-		assert.notEqual(actual, expected, [message]);
-		assert.strictEqual(actual, expected, [message]);        // ===
-		assert.operator(actual, operator, expected, [message]); // < > etc
-		assert.closeTo(actual, expected, delta, [message]);
-		TODO closeTopercent(actual, expected, percent, delta, [message]) add with plugin utilities
-		assert.match(actual, regex, [message]); // string or array
-		// object or array
-		assert.deepEqual(actual, expected, [message]);
-		assert.lengthOf(actual, length, [message]);     // string or array length
-		assert.include(haystack, needle, [message]);    // string or array contains
-		assert.property(actual, property, [message]);
-		assert.deepProperty(actual, property, [message]);    // property supports dot.notation[idx]
-		assert.propertyVal(actual, property, value, [message]);
-		assert.sameMembers(actual, expected, [message]);     // arrays ignore order of values
-		assert.includeMembers(actual, expected, [message]);  // array subset is included
-		// exceptions
-		// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error#Error_types
-		assert.throw/throws/Throw(fn, [constructor/string/regexp], [string/regexp], [message]);
-		assert.doesNotThrow(fn, [constructor/regexp], [message]);
-		// objects/types
-		assert.typeOf(actual, type, [message]);
-		assert.instanceOf(actual, constructor, [message]);
-		assert.isTrue(actual, [message]);  // actual true
-
-	Test expectations: (node and browsers)
-		expect(actual, [message]).to.be.a(type);
-		expect(actual, [message]).to.equal(expected);
-		expect(actual, [message]).to.have.length(length);
-		expect(actual, [message]).to.have.property(property).with.length(length);
-
-	Test should: (node and non IE browsers)
-		should.exist(actual);
-		should.not.exist(actual); // to handle null/undefined
-		should.equal(expected);
-		should.not.equal(expected);
-		should.throw/Throw([constructor/string/regexp], [string/regexp]);
-		should.not.throw/Throw([constructor/string/regexp], [string/regexp]);
-		actual.should.be.a(type);
-		actual.should.be.an(type);
-		actual.should.equal(expected);
-		actual.should.not.equal(expected);
-		actual.should.have.length(length);
-		actual.should.have.property(property).with.length(length);
-*/
 
 var isNode = typeof process === 'object' && process + '' === '[object process]',
 	dump = function (n, o) { console.log(n, isNode ? require('util').inspect(o) : o); },
@@ -87,6 +22,7 @@ var isNode = typeof process === 'object' && process + '' === '[object process]',
 	expect = chai.expect,
 	should = chai.should(), // note function call here
 	Classes = !isNode ? window.Classes : {
+		'Javascript' : require('../lib/javascript-objs'),
 		'Augment': require('../lib/augment-objs'),
 		'Klass':   require('../lib/klass-objs')
 	},
@@ -101,8 +37,227 @@ chai.config.showDiff = false;      // turn off reporter diff display
 chai.config.truncateThreshold = 0; // disable truncating actual/expected values
 
 dump('Classes', Classes);
-dump('prototypes', Classes.Klass.getPrototypesOf(Classes.Klass.thing));
-dump('ancestors', Classes.Klass.getAncestorsOf(Classes.Klass.thing));
+//dump('prototypes', Classes.Klass.getPrototypesOf(Classes.Klass.thing));
+//dump('ancestors', Classes.Klass.getAncestorsOf(Classes.Klass.thing));
+
+
+function testPropGen()
+{
+	describe('Javascript.lib.constant', function()
+	{
+		it('constant({}, ...) should define visible constant by default', function () {
+			var obj = Classes.Javascript.lib.constant({}, 'constant', 42);
+			expect(	obj.constant).to.equal(42);
+			expect(Object.keys(obj)).to.deep.equal(['constant']);
+		});
+		it('constant({}, false, ...) should define invisible constant', function () {
+			var obj = Classes.Javascript.lib.constant({}, false, 'constant', 48);
+			expect(	obj.constant).to.equal(48);
+			expect(Object.keys(obj)).to.deep.equal([]);
+		});
+		it('constant({}, true, ...) should define visible constant explicitly', function () {
+			var obj = Classes.Javascript.lib.constant({}, true, 'constant', 148);
+			expect(	obj.constant).to.equal(148);
+			expect(Object.keys(obj)).to.deep.equal(['constant']);
+		});
+		it('constant({}, ...) should define multiple visible constants by arguments', function () {
+			var obj = Classes.Javascript.lib.constant(
+				{},
+				'constant', 42,
+				'CONST', 88);
+			expect(	obj.CONST).to.equal(88);
+			expect(Object.keys(obj)).to.deep.equal(['constant', 'CONST']);
+		});
+		it('constant({}, ...) should handle odd number of arguments', function () {
+			var obj = Classes.Javascript.lib.constant(
+				{},
+				'constant', 42,
+				'CONST');
+			expect(	obj.CONST).to.equal(void 0);
+			expect(Object.keys(obj)).to.deep.equal(['constant', 'CONST']);
+		});
+		it('constant({}, [ key, value, ...]) should define multiple visible constants by array', function () {
+			var obj = Classes.Javascript.lib.constant(
+				{},
+				[
+					'constant', 1242,
+					'CONST', 1288
+				]);
+			expect(	obj.CONST).to.equal(1288);
+			expect(Object.keys(obj)).to.deep.equal(['constant', 'CONST']);
+		});
+		it('constant({}, { key: value, ...}) should define multiple visible constants by object', function () {
+			var obj = Classes.Javascript.lib.constant(
+				{},
+				{
+					'constant': 142,
+					'CONST': 188
+				});
+			expect(	obj.CONST).to.equal(188);
+			expect(Object.keys(obj)).to.deep.equal(['constant', 'CONST']);
+		});
+		it('constant({}, false, { key: value, ...}) should define multiple invisible constants by object', function () {
+			var obj = Classes.Javascript.lib.constant(
+				{},
+				false,
+				{
+					'constant': 1421,
+					'CONST': 1881
+				});
+			expect(	obj.CONST).to.equal(1881);
+			expect(Object.keys(obj)).to.deep.equal([]);
+		});
+	});
+}
+
+testPropGen();
+
+function testProperties(libName, nameSpaceName, nameSpace)
+{
+	var base = nameSpaceName + '.Property',
+		obj = nameSpace.Property;
+
+	describe(libName, function()
+	{
+		describe(base, function()
+		{
+			var aKeys = [
+				'normal',
+				'visibleConstant',
+				'visibleLimited',
+				'visibleSticky'
+			];
+			var aProps = [
+				'constant',
+				'deletableConstant',
+				'normal',
+				'visibleConstant',
+				'visibleLimited',
+				'visibleSticky'
+			];
+			it('should be object', function () {
+				expect(obj).to.be.a('object');
+			});
+			it('should have keys ' + aKeys.join(', '), function () {
+				expect(Object.keys(obj).sort()).to.deep.equal(aKeys);
+			});
+			it('should have properties ' + aProps.join(', '), function () {
+				expect(Object.getOwnPropertyNames(obj).sort()).to.deep.equal(aProps);
+			});
+
+			describe('constants', function()
+			{
+				it('constant should be an own property', function () {
+					expect(obj.hasOwnProperty('constant')).to.equal(true);
+				});
+				it('constant should be 54', function () {
+					expect(obj.constant).to.equal(54);
+				});
+				it('constant should not be writable', function () {
+					assert.throws(
+						function () { obj.constant = 23; },
+						/Cannot assign to read only property/);
+					expect(obj.constant).to.equal(54);
+				});
+				it('constant should not be deletable', function () {
+					assert.throws(
+						function () { delete obj.constant; },
+						/Cannot delete property/);
+					expect(obj.constant).to.equal(54);
+				});
+
+				it('visibleConstant should be an own property', function () {
+					expect(obj.hasOwnProperty('visibleConstant')).to.equal(true);
+				});
+				it('visibleConstant should be 48', function () {
+					expect(obj.visibleConstant).to.equal(48);
+				});
+
+				it('deletableConstant should be an own property', function () {
+					expect(obj.hasOwnProperty('deletableConstant')).to.equal(true);
+				});
+				it('deletableConstant should be 96', function () {
+					expect(obj.deletableConstant).to.equal(96);
+				});
+				it('deletableConstant should be deletable', function () {
+					assert.doesNotThrow(
+						function () { delete obj.deletableConstant; },
+						/Cannot delete property/);
+					expect(obj.deletableConstant).to.equal(void 0);
+				});
+			});
+
+			describe('writables', function()
+			{
+				it('normal should be 42', function () {
+					expect(obj.normal).to.equal(42);
+				});
+				it('normal should be writable', function () {
+					obj.normal = 32;
+					expect(obj.normal).to.equal(32);
+				});
+				it('normal should be an own property', function () {
+					expect(obj.hasOwnProperty('normal')).to.equal(true);
+				});
+
+				it('should add property', function () {
+					obj.added = 12;
+					expect(obj.added).to.equal(12);
+				});
+				it('should remove property', function () {
+					delete obj.added;
+					expect(obj.added).to.equal(void 0);
+				});
+				it('should have keys ' + aKeys.join(', ') + ' after delete', function () {
+					expect(Object.keys(obj).sort()).to.deep.equal(aKeys);
+				});
+
+				it('visibleSticky should be an own property', function () {
+					expect(obj.hasOwnProperty('visibleSticky')).to.equal(true);
+				});
+				it('visibleSticky should be 84', function () {
+					expect(obj.visibleSticky).to.equal(84);
+				});
+				it('visibleSticky should be writable', function () {
+					obj.visibleSticky = 321;
+					expect(obj.visibleSticky).to.equal(321);
+				});
+				it('visibleSticky should not be deletable', function () {
+					assert.throws(
+						function () { delete obj.visibleSticky; },
+						/Cannot delete property/);
+					expect(obj.visibleSticky).to.equal(321);
+				});
+
+				it('visibleLimited should be an own property', function () {
+					expect(obj.hasOwnProperty('visibleLimited')).to.equal(true);
+				});
+				it('visibleLimited should be 55', function () {
+					expect(obj.visibleLimited).to.equal(55);
+				});
+				it('visibleLimited should be writable', function () {
+					obj.visibleLimited = 1;
+					expect(obj.visibleLimited).to.equal(1);
+				});
+				it('visibleLimited should be limited in value by settor function', function () {
+					obj.visibleLimited = 123;
+					expect(obj.visibleLimited).to.equal(100);
+				});
+				it('visibleLimited should not be deletable', function () {
+					assert.throws(
+						function () { delete obj.visibleLimited; },
+						/Cannot delete property/);
+					expect(obj.visibleLimited).to.equal(100);
+				});
+			});
+
+		});
+	});
+
+}
+
+testProperties('javascript', 'Classes.Javascript', Classes.Javascript);
+
 
 function testThingClass(libName, nameSpaceName, nameSpace)
 {
@@ -269,19 +424,19 @@ function testBaseInstance(libName, nameSpaceName, nameSpace, typeName)
 	});
 }
 
+if (false) {
+	testBase('augment', 'Classes.Augment', Classes.Augment);
+	testBase('klass',   'Classes.Klass',   Classes.Klass, 'function');
 
-testBase('augment', 'Classes.Augment', Classes.Augment);
-testBase('klass',   'Classes.Klass',   Classes.Klass, 'function');
+	testThingClass('augment', 'Classes.Augment', Classes.Augment);
+	testThingClass('klass', 'Classes.Klass', Classes.Klass);
+	testThingInstance('augment', 'Classes.Augment', Classes.Augment);
+	testThingInstance('klass', 'Classes.Klass', Classes.Klass);
 
-testThingClass('augment', 'Classes.Augment', Classes.Augment);
-testThingClass('klass', 'Classes.Klass', Classes.Klass);
-testThingInstance('augment', 'Classes.Augment', Classes.Augment);
-testThingInstance('klass', 'Classes.Klass', Classes.Klass);
-
-void testBaseInstance;
-//testBaseInstance('augment', 'Classes.Augment', Classes.Augment);
-//testBaseInstance('klass',   'Classes.Klass',   Classes.Klass);
-
+	void testBaseInstance;
+	//testBaseInstance('augment', 'Classes.Augment', Classes.Augment);
+	//testBaseInstance('klass',   'Classes.Klass',   Classes.Klass);
+}
 
 if (false) {
 	beforeEach(function()
