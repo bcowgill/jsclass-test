@@ -123,7 +123,105 @@ function testPropGen()
 			expect(Object.keys(obj)).to.deep.equal([]);
 		});
 	});
-}
+
+	describe('Javascript.lib.property() - make properties on object', function()
+	{
+		var make = Classes.Javascript.lib;
+		it('property({}, key, value) should define visible property by default', function () {
+			var obj = make.property({}, 'property', 42);
+			expect(	obj.property).to.equal(42);
+			expect(Object.keys(obj)).to.deep.equal(['property']);
+			assert.doesNotThrow(
+				function () { obj.property = 23; },
+				/Cannot assign to read only property/);
+			expect(obj.property).to.equal(23);
+		});
+		it('property({}, key, { prop desc }) should define visible property with get/set', function () {
+			var obj = make.property(
+				{ '_prop': 52 },
+				'property',
+				{
+					get: function () { return this._prop; },
+					set: function (value) { this._prop = value > 10 ? 10 : value; }
+				}
+			);
+			expect(	obj.property).to.equal(52);
+			expect(Object.keys(obj)).to.deep.equal(['_prop', 'property']);
+			assert.doesNotThrow(
+				function () { obj.property = 23; },
+				/Cannot assign to read only property/);
+			expect(obj.property).to.equal(10);
+		});
+		it('property({}, false, key, value) should define invisible property', function () {
+			var obj = make.property({}, false, 'property', 48);
+			expect(	obj.property).to.equal(48);
+			expect(Object.keys(obj)).to.deep.equal([]);
+		});
+		it('property({}, true, key, value) should define visible property explicitly', function () {
+			var obj = make.property({}, true, 'property', 148);
+			expect(	obj.property).to.equal(148);
+			expect(Object.keys(obj)).to.deep.equal(['property']);
+		});
+		it('property({}, key, value, ...) should define multiple visible properties by arguments', function () {
+			var obj = make.property(
+				{},
+				'property', 42,
+				'PROP', 88);
+			expect(	obj.PROP).to.equal(88);
+			expect(Object.keys(obj)).to.deep.equal(['property', 'PROP']);
+		});
+		it('property({}, key, value, ...) should handle odd number of arguments', function () {
+			var obj = make.property(
+				{},
+				'property', 42,
+				'PROP');
+			expect(	obj.PROP).to.equal(void 0);
+			expect(Object.keys(obj)).to.deep.equal(['property', 'PROP']);
+		});
+		it('property({}, [ key, value, ...]) should define multiple visible properties by array', function () {
+			var obj = make.property(
+				{},
+				[
+					'property', 1242,
+					'PROP', 1288
+				]);
+			expect(	obj.PROP).to.equal(1288);
+			expect(Object.keys(obj)).to.deep.equal(['property', 'PROP']);
+		});
+		it('property({}, { key: value, ...}) should define multiple visible properties by object', function () {
+			var obj = make.property(
+				{},
+				{
+					'property': 142,
+					'PROP': 188
+				});
+			expect(	obj.PROP).to.equal(188);
+			expect(Object.keys(obj)).to.deep.equal(['property', 'PROP']);
+		});
+		it('property({}, false, { key: value, ...}) should define multiple invisible properties by object', function () {
+			var obj = make.property(
+				{},
+				false,
+				{
+					'property': 1421,
+					'PROP': 1881
+				});
+			expect(	obj.PROP).to.equal(1881);
+			expect(Object.keys(obj)).to.deep.equal([]);
+		});
+		it('property({}, false, [ key, value, ...]) should define multiple invisible properties by array', function () {
+			var obj = make.property(
+				{},
+				false,
+				[
+					'property', 12042,
+					'PROP', 12088
+				]);
+			expect(	obj.PROP).to.equal(12088);
+			expect(Object.keys(obj)).to.deep.equal([]);
+		});
+	});
+} // testPropGen()
 
 testPropGen();
 
