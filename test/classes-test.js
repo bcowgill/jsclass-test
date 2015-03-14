@@ -40,36 +40,40 @@ dump('Classes', Classes);
 //dump('prototypes', Classes.Klass.getPrototypesOf(Classes.Klass.thing));
 //dump('ancestors', Classes.Klass.getAncestorsOf(Classes.Klass.thing));
 
-
 function testPropGen()
 {
-	describe('Javascript.lib.constant', function()
+	describe('Javascript.lib.constant() - make constants on object', function()
 	{
-		it('constant({}, ...) should define visible constant by default', function () {
-			var obj = Classes.Javascript.lib.constant({}, 'constant', 42);
+		var make = Classes.Javascript.lib;
+		it('constant({}, key, value) should define visible constant by default', function () {
+			var obj = make.constant({}, 'constant', 42);
 			expect(	obj.constant).to.equal(42);
 			expect(Object.keys(obj)).to.deep.equal(['constant']);
+			assert.throws(
+				function () { obj.constant = 23; },
+				/Cannot assign to read only property/);
+			expect(obj.constant).to.equal(42);
 		});
-		it('constant({}, false, ...) should define invisible constant', function () {
-			var obj = Classes.Javascript.lib.constant({}, false, 'constant', 48);
+		it('constant({}, false, key, value) should define invisible constant', function () {
+			var obj = make.constant({}, false, 'constant', 48);
 			expect(	obj.constant).to.equal(48);
 			expect(Object.keys(obj)).to.deep.equal([]);
 		});
-		it('constant({}, true, ...) should define visible constant explicitly', function () {
-			var obj = Classes.Javascript.lib.constant({}, true, 'constant', 148);
+		it('constant({}, true, key, value) should define visible constant explicitly', function () {
+			var obj = make.constant({}, true, 'constant', 148);
 			expect(	obj.constant).to.equal(148);
 			expect(Object.keys(obj)).to.deep.equal(['constant']);
 		});
-		it('constant({}, ...) should define multiple visible constants by arguments', function () {
-			var obj = Classes.Javascript.lib.constant(
+		it('constant({}, key, value, ...) should define multiple visible constants by arguments', function () {
+			var obj = make.constant(
 				{},
 				'constant', 42,
 				'CONST', 88);
 			expect(	obj.CONST).to.equal(88);
 			expect(Object.keys(obj)).to.deep.equal(['constant', 'CONST']);
 		});
-		it('constant({}, ...) should handle odd number of arguments', function () {
-			var obj = Classes.Javascript.lib.constant(
+		it('constant({}, key, value, ...) should handle odd number of arguments', function () {
+			var obj = make.constant(
 				{},
 				'constant', 42,
 				'CONST');
@@ -77,7 +81,7 @@ function testPropGen()
 			expect(Object.keys(obj)).to.deep.equal(['constant', 'CONST']);
 		});
 		it('constant({}, [ key, value, ...]) should define multiple visible constants by array', function () {
-			var obj = Classes.Javascript.lib.constant(
+			var obj = make.constant(
 				{},
 				[
 					'constant', 1242,
@@ -87,7 +91,7 @@ function testPropGen()
 			expect(Object.keys(obj)).to.deep.equal(['constant', 'CONST']);
 		});
 		it('constant({}, { key: value, ...}) should define multiple visible constants by object', function () {
-			var obj = Classes.Javascript.lib.constant(
+			var obj = make.constant(
 				{},
 				{
 					'constant': 142,
@@ -97,7 +101,7 @@ function testPropGen()
 			expect(Object.keys(obj)).to.deep.equal(['constant', 'CONST']);
 		});
 		it('constant({}, false, { key: value, ...}) should define multiple invisible constants by object', function () {
-			var obj = Classes.Javascript.lib.constant(
+			var obj = make.constant(
 				{},
 				false,
 				{
@@ -105,6 +109,17 @@ function testPropGen()
 					'CONST': 1881
 				});
 			expect(	obj.CONST).to.equal(1881);
+			expect(Object.keys(obj)).to.deep.equal([]);
+		});
+		it('constant({}, false, [ key, value, ...]) should define multiple invisible constants by array', function () {
+			var obj = make.constant(
+				{},
+				false,
+				[
+					'constant', 12042,
+					'CONST', 12088
+				]);
+			expect(	obj.CONST).to.equal(12088);
 			expect(Object.keys(obj)).to.deep.equal([]);
 		});
 	});
