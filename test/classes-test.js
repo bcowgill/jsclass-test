@@ -36,6 +36,33 @@ chai.config.includeStack = true;   // turn on stack trace on assertion failure
 chai.config.showDiff = false;      // turn off reporter diff display
 chai.config.truncateThreshold = 0; // disable truncating actual/expected values
 
+if (!isNode) {
+	// Display a locale and GMT time ticker footer.
+	var dom, count = 0;
+	setInterval(function () {
+		if (!dom) {
+			dom = document.getElementById('time');
+			var now = new Date();
+			console.log(now.toJSON());
+		}
+		if (dom) {
+			count++;
+			if (count > 10) {
+//				return;
+			}
+			var now = new Date(),
+				utc = now.toUTCString(),
+				offset = Number(now.getTimezoneOffset() / 10000)
+					.toFixed(4).replace('-0.', '-').replace('0.', '+');
+
+			dom.innerHTML = "<span style='font-family: ProFontWindows, monospace; font-weight: 900; font-size: 11px;'><span style='float: left; margin-left: 5px; margin-bottom: 5px;'>" + now.toLocaleString()
+				+ " GMT" + offset
+				+ "</span><span style='float: right; margin-right: 5px;'>"
+				+ utc + "</span></span>";
+		}
+	}, 1000 / 2);
+}
+
 dump('Classes', Classes);
 //dump('prototypes', Classes.Klass.getPrototypesOf(Classes.Klass.thing));
 //dump('ancestors', Classes.Klass.getAncestorsOf(Classes.Klass.thing));
