@@ -46,10 +46,10 @@ if (!isNode) {
 			console.log(now.toJSON());
 		}
 		if (dom) {
-			count++;
-			if (count > 10) {
+			if (count++ > 10) {
 //				return;
 			}
+			// Alternative: http://momentjs.com/timezone/docs/
 			var now = new Date(),
 				utc = now.toUTCString(),
 				offset = Number(now.getTimezoneOffset() / 10000)
