@@ -106,6 +106,9 @@ prop = ko.observableArray(anArray)
 // computations of observables which may change state
 prop = ko.computed(fnCompute, thisTarget) -- compute something from observables, which you might modify
 	.extend, .subscribe same as for normal observables
+	ko.isComputed(prop) -- check if property is a computed observable or not
+	ko.isObservable(prop) -- true for any type of observable
+	ko.isWritableObservable(prop)
 
 // computations of observables which do not modify state
 prop = ko.pureComputed(fnCompute, thisTarget) -- compute something from observables without changing any of them
