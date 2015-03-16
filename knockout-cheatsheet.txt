@@ -1,0 +1,127 @@
+knockout cheat sheet quick reference
+
+data-bind
+	visible:
+		<span data-bind="visible: accessor">Visible if accessor returns true</span>
+	text:
+		<span data-bind="text: accessor">[accessor() return inserted here as text]</span>
+	html:
+		<div data-bind="html: accessor">[accessor() return inserted here as html]</div>
+	style:
+		<span data-bind="style: { color: accessor, ... }">Text color based on accessor return value</span>
+	css: TODO
+		<span data-bind="css: { outdent: accessor, ... }">outdent class applied if accessor return is true</span>
+	attr:
+		<span data-bind="attr: { contenteditable: accessor, ... }">attribute contenteditable=accessor return value</span>
+
+	enable:
+	disable:
+	click:
+		<button data-bind='click: onClick, disable: isDisabled'>Click me</button>
+		<button data-bind='click: onClick, enable: isEnabled'>Click me</button>
+		<button type="submit" data-bind="enable: isEnabled">Save</button>
+		<button data-bind='click: onClick.bind($data, "someparam")'>Add something</button>
+
+	submit: TODO
+		<button type="submit" data-bind="enable: isEnabled">Save</button>
+ 
+	value:
+	valueUpdate: input, afterkeydown
+	uniqueName: TODO
+		<input data-bind="enable: isEnabled, value: accessor, valueUpdate='afterkeydown'" />
+		<input type="password" data-bind="value: accessor, valueUpdate='afterkeydown'" />
+		<textarea data-bind="value: accessor, valueUpdate='afterkeydown'">accessor() return inserted here</textarea>
+	checked:
+		<input type="checkbox" data-bind="checked: accessor />
+
+		<label><input type="radio" value="Alpha" data-bind="checked: accessor"/>Alpha</label>
+		<label><input type="radio" value="Beta"  data-bind="checked: accessor" />Beta</label>
+		<label><input type="radio" value="Gamma" data-bind="checked: accessor" />Gamma</label>
+
+	options: 
+	optionsText:
+	optionsCaption:
+	selectedOptions:
+		<select data-bind="options: optionList, value: selectedOptionValue"></select>
+		<select data-bind='options: optionList, optionsText: "name", optionsCaption: "Select...", value: selectedOptionValue'> </select>
+		<select multiple="multiple" data-bind="options: optionList, selectedOptions: selectedOptionList"></select>
+
+data-bind for logic control
+	foreach: TODO can access the loop idx?
+		<ol data-bind="foreach: listOfItems">
+			<li data-bind="text: name, visible: $root.isVisible">listOfItems[idx].name() accessor return goes here</li>
+		</ol>
+
+	if:
+	ifnot:
+
+	with:
+		<td data-bind='with: product'>
+			<span data-bind='text: formatCurrency(price)'>product.price() inserted here by formatCurrency</span>
+		</td>
+
+	template:
+	beforeRemove:
+	afterAdd:
+		<div data-bind='template: { foreach: listOfItems,
+			beforeRemove: animateHide,
+			afterAdd: animateShow }'>
+			<div data-bind='attr: { "class": "item " + type }, text: name'></div>
+		</div>
+		in ViewModel
+		// Animation callbacks for the planets list
+		this.animateShow = function (elem) { if (elem.nodeType === 1) $(elem).hide().slideDown() }
+		this.animateHide = function (elem) { if (elem.nodeType === 1) $(elem).slideUp(function() { $(elem).remove(); }) }
+
+
+prop = ko.observable(value)
+	prop() -- get
+	prop(42) -- set
+	prop.extend({ notify: 'always' }) -- notify observers on all settors, not just ones which actually change the value
+	// http://knockoutjs.com/documentation/rateLimit-observable.html
+	prop.extend({ rateLimit: 50 /* millisecs */ }) -- slow down notification to observers for rapidly changing or when updates are expensive
+	prop.extend({ rateLimit: { timeout: 500, method: "notifyWhenChangesStop" } }) or notifyAtFixedRate
+	observer = prop.subscribe(fnOnChange, targetThis, event default 'change')
+		event: change, beforeChange
+	prop.subscribe(function (newValue) {}) -- manually subscribe to observe changes in the property
+	observer.dispose() -- stop observing the property
+
+prop.peek TODO
+
+prop = ko.observableArray(anArray)
+	prop() -- get access to underlying anArray
+	prop().length
+	prop()[idx]
+	prop.push(value)
+	prop.indexOf(findMe) -- -1 if not found, or index for findMe in the array
+	prop.slice(idx1, idx2) -- get subset of array
+	prop. pop, push, shift, unshift, reverse, sort, splice -- as standard JS array functions
+	prop.remove(findMe) -- remove and return all items matching findMe
+	prop.removeAll([findMe, ...]) -- remove and return all items matching all findMe's
+	prop.removeAll() -- return all items then empty the array
+	prop.destroy(findMe) -- mark all matching items with _destroy = true
+	prop.destroyAll([findMe, ...])
+	.extend, .subscribe same as for normal observables
+
+// computations of observables which may change state
+prop = ko.computed(fnCompute, thisTarget) -- compute something from observables, which you might modify
+	.extend, .subscribe same as for normal observables
+
+// computations of observables which do not modify state
+prop = ko.pureComputed(fnCompute, thisTarget) -- compute something from observables without changing any of them
+	.extend, .subscribe same as for normal observables
+
+ko.applyBindings(new ViewModel(), document.getElementById('someElementId'))
+	$root will refer to this new ViewModel()
+
+$root
+$parent
+$data
+
+
+ko.bindingHandlers.name = {
+	init: function (element, fnValueAccessor),
+	update: function (element, fnValueAccessor)
+}
+
+ko.utils.arrayMap(anArray, function () {})
