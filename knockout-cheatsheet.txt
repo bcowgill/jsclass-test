@@ -103,6 +103,10 @@ prop = ko.observableArray(anArray)
 	prop.destroyAll([findMe, ...])
 	.extend, .subscribe same as for normal observables
 
+// computations of observables which do not modify state
+prop = ko.pureComputed(fnCompute, thisTarget) -- compute something from observables without changing any of them
+	.extend, .subscribe same as for normal observables
+
 // computations of observables which may change state
 prop = ko.computed(fnCompute, thisTarget) -- compute something from observables, which you might modify
 	.extend, .subscribe same as for normal observables
@@ -110,9 +114,19 @@ prop = ko.computed(fnCompute, thisTarget) -- compute something from observables,
 	ko.isObservable(prop) -- true for any type of observable
 	ko.isWritableObservable(prop)
 
-// computations of observables which do not modify state
-prop = ko.pureComputed(fnCompute, thisTarget) -- compute something from observables without changing any of them
-	.extend, .subscribe same as for normal observables
+// writable computed observables
+    this.formattedPrice = ko.pureComputed({
+        read: function () {
+            return '$' + this.price().toFixed(2);
+        },
+        write: function (value) {
+            // Strip out unwanted characters, parse as float, then write the 
+            // raw data back to the underlying "price" observable
+            value = parseFloat(value.replace(/[^\.\d]/g, ""));
+            this.price(isNaN(value) ? 0 : value); // Write to underlying storage
+        },
+        owner: this
+    });
 
 ko.applyBindings(new ViewModel(), document.getElementById('someElementId'))
 	$root will refer to this new ViewModel()
